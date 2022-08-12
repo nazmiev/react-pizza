@@ -58,7 +58,7 @@ const Home = () => {
         />
         <Sort value={sortType} onChangeSort={(i) => setSortType(i)} />
       </div>
-      <h2 className="content__title">Все пиццы1</h2>
+      <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
       <Pagination onChangePage={(number) => setCurrentPage(number)} />
     </div>
