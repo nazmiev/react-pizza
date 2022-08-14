@@ -19,6 +19,9 @@ import { SearchContext } from "../App";
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isSearch = React.useRef(false);
+  const isMounted = React.useRef(false);
+
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filter
   );
@@ -35,6 +38,34 @@ const Home = () => {
     dispatch(setCurrentPage(number));
   };
 
+  const fetchPizzas = () => {
+    setIsLoading(true);
+
+    const category = categoryId > 0 ? `category=${categoryId}` : "";
+    const search = searchValue ? `&search=${searchValue}` : "";
+
+    axios
+      .get(
+        `https://62f5f074612c13062b430099.mockapi.io/pizza?page=${currentPage}&limit=4&${category}&sortBy=${sort.sortProperty}&order=asc${search}`
+      )
+      .then((response) => {
+        setItems(response.data);
+        setIsLoading(false);
+      });
+  };
+
+  React.useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        sortProperty: sort.sortProperty,
+        categoryId,
+        currentPage,
+      });
+      navigate(`?${queryString}`);
+    }
+    isMounted.current = true;
+  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
+
   React.useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
@@ -49,34 +80,18 @@ const Home = () => {
           sort,
         })
       );
+      isSearch.current = true;
     }
   }, []);
 
   React.useEffect(() => {
-    setIsLoading(true);
-
-    const category = categoryId > 0 ? `category=${categoryId}` : "";
-    const search = searchValue ? `&search=${searchValue}` : "";
-
-    axios
-      .get(
-        `https://62f5f074612c13062b430099.mockapi.io/pizza?page=${currentPage}&limit=4&${category}&sortBy=${sort.sortProperty}&order=asc${search}`
-      )
-      .then((response) => {
-        setItems(response.data);
-        setIsLoading(false);
-      });
-
     window.scrollTo(0, 0);
-  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-  React.useEffect(() => {
-    const queryString = qs.stringify({
-      sortProperty: sort.sortProperty,
-      categoryId,
-      currentPage,
-    });
-    navigate(`?${queryString}`);
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
+
+    isSearch.current = false;
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => <Pizza key={obj.id} {...obj} />);
