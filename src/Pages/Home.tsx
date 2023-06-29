@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux/es/exports";
 import { useAppDispatch } from "../redux/store";
 import Categories from "../components/Categories";
