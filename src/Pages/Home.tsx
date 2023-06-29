@@ -1,5 +1,4 @@
 import React from "react";
-// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux/es/exports";
 import { useAppDispatch } from "../redux/store";
 import Categories from "../components/Categories";
@@ -13,12 +12,8 @@ import { selectPizzaData } from "../redux/pizza/selectors";
 import { fetchPizzas } from "../redux/pizza/asyncActions";
 
 const Home: React.FC = () => {
-  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // const isMounted = React.useRef(false);
-
   const { items, status } = useSelector(selectPizzaData);
-  // const { items, status } = useSelector(state => state.pizza)
   const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
 
   const onChangeCategory = React.useCallback((id: number) => {
@@ -43,40 +38,6 @@ const Home: React.FC = () => {
       })
     )
   }
-
-  // React.useEffect(() => {
-  //   if (isMounted.current) {
-  //     const queryString = qs.stringify({
-  //       sortProperty: sort.sortProperty,
-  //       categoryId,
-  //       currentPage,
-  //     });
-  //     navigate(`?${queryString}`);
-  //   };
-
-
-  //   if (!window.location.search) {
-  //     getPizzas();
-  //   }
-
-  //   isMounted.current = true;
-
-  // }, [categoryId, sort.sortProperty, searchValue, currentPage]);
-
-  // React.useEffect(() => {
-  //   if (window.location.search) {
-  //     const params = qs.parse(window.location.search.substring(1)) as unknown as SearchPizzaParams;
-  //     const sort = sortList.find((obj) => obj.sortProperty === params.sortBy);
-
-  //     dispatch(setFilters({
-  //       searchValue: params.search,
-  //       categoryId: Number(params.category),
-  //       currentPage: Number(params.currentPage),
-  //       sort: sort || sortList[0],
-  //     }));
-  //   }
-  //   isMounted.current = true;
-  // }, []);
 
   React.useEffect(() => {
     getPizzas();
