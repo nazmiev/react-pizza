@@ -13,9 +13,9 @@ import { selectPizzaData } from "../redux/pizza/selectors";
 import { fetchPizzas } from "../redux/pizza/asyncActions";
 
 const Home: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isMounted = React.useRef(false);
+  // const isMounted = React.useRef(false);
 
   const { items, status } = useSelector(selectPizzaData);
   // const { items, status } = useSelector(state => state.pizza)
